@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brendan Clancy</title>
+<meta name="description" content="Brendan Clancy — IT & security operations. Identity, access control and Microsoft 365 administration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single readable column, sign-in-log hero panel, case studies tagged by NIST CSF function */
+:root {
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --fg: #142030;
+  --muted: #56657a;
+  --line: #d9e0e9;
+  --accent: #a96800;        /* signal amber */
+  --accent-soft: #fbefd9;
+  --ok: #1d7a55;
+  --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1520; --surface: #142131; --fg: #e6ecf3; --muted: #93a3b8;
+    --line: #24354a; --accent: #f2b33d; --accent-soft: #2b2416; --ok: #52c493;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1520; --surface: #142131; --fg: #e6ecf3; --muted: #93a3b8;
+  --line: #24354a; --accent: #f2b33d; --accent-soft: #2b2416; --ok: #52c493;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 400 1rem/1.65 var(--font-body);
+  padding-inline: 20px;
+}
+.wrap { max-width: 1040px; margin-inline: auto; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--font-display); font-stretch: 112%; line-height: 1.1; text-wrap: balance; margin: 0; }
+.label { font: 500 .75rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+
+/* Nav */
+nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+  margin-inline: -20px; padding-inline: 20px;
+}
+nav .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 14px; flex-wrap: wrap; }
+.brand { font: 500 .9rem var(--font-mono); text-decoration: none; }
+.brand span { color: var(--accent); }
+nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+nav ul a { text-decoration: none; color: var(--muted); font-size: .92rem; }
+nav ul a:hover { color: var(--fg); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; padding-block: 72px 64px; }
+.hero > * { min-width: 0; }
+.hero h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 800; margin-block: 14px 18px; letter-spacing: -.01em; }
+.hero p.lede { font-size: 1.15rem; color: var(--muted); max-width: 34ch; margin: 0 0 28px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 6px;
+  font: 500 .95rem var(--font-body); text-decoration: none; border: 1px solid var(--line); background: var(--surface);
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.btn:hover { border-color: var(--accent); }
+
+.log { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.log header { display: flex; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--line); font: 500 .75rem var(--font-mono); color: var(--muted); gap: 12px; }
+.log header b { color: var(--ok); font-weight: 500; }
+.log ol { list-style: none; margin: 0; padding: 8px 0; font: .8rem/1.5 var(--font-mono); overflow-x: auto; }
+.log li { display: grid; grid-template-columns: 4.6rem 5.2rem 1fr; gap: 10px; padding: 7px 16px; }
+.log li:nth-child(odd) { background: color-mix(in srgb, var(--line) 30%, transparent); }
+.log time { color: var(--muted); font-variant-numeric: tabular-nums; }
+.log .cat { color: var(--accent); }
+
+/* Sections */
+section { padding-block: 64px; border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 32px; max-width: 62ch; }
+.sec-head h2 { font-size: clamp(1.7rem, 3.5vw, 2.3rem); font-weight: 800; }
+.sec-head p { color: var(--muted); margin: 0; }
+
+.about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; }
+.about > * { min-width: 0; }
+.about p { margin: 0 0 16px; max-width: 62ch; }
+.facts { display: grid; gap: 0; margin: 0; align-self: start; border-top: 1px solid var(--line); }
+.facts div { display: grid; grid-template-columns: 8rem 1fr; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.facts dt { font: 500 .78rem var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding-top: 3px; }
+.facts dd { margin: 0; }
+
+/* Case studies */
+.cases { display: grid; gap: 20px; }
+.case {
+  display: grid; grid-template-columns: 11rem 1fr; gap: 28px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 26px 28px;
+}
+.case > * { min-width: 0; }
+.case aside { display: grid; gap: 8px; align-content: start; }
+.fn { justify-self: start; font: 500 .72rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.case aside small { font: .78rem var(--font-mono); color: var(--muted); }
+.case h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 10px; }
+.case p { margin: 0 0 12px; max-width: 64ch; }
+.case ul { margin: 0 0 14px; padding-left: 1.1rem; max-width: 64ch; }
+.case li { margin-bottom: 4px; }
+.angle { border-left: 2px solid var(--accent); padding-left: 14px; color: var(--muted); font-size: .95rem; }
+.angle strong { color: var(--fg); font-weight: 600; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.tags span { font: .75rem var(--font-mono); padding: 3px 8px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); }
+
+/* Skills */
+.skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px 40px; }
+.skills > div { min-width: 0; }
+.skills h3 { font: 600 1rem var(--font-body); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.skills ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; color: var(--muted); }
+.skills li::before { content: "› "; color: var(--accent); font-family: var(--font-mono); }
+
+/* Contact */
+.contact { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+.contact > * { min-width: 0; }
+.contact-list { display: grid; gap: 10px; }
+.contact-list a { display: flex; justify-content: space-between; gap: 16px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; text-decoration: none; }
+.contact-list a:hover { border-color: var(--accent); }
+.contact-list span:first-child { font: 500 .78rem var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding-top: 2px; }
+.contact-list span:last-child { overflow-wrap: anywhere; text-align: right; }
+
+footer { border-top: 1px solid var(--line); padding-block: 28px 40px; font: .8rem var(--font-mono); color: var(--muted); }
+
+@media (max-width: 820px) {
+  .hero, .about, .contact { grid-template-columns: 1fr; gap: 32px; }
+  .hero { padding-block: 48px; }
+  .skills { grid-template-columns: 1fr 1fr; }
+  .case { grid-template-columns: 1fr; gap: 14px; padding: 22px 20px; }
+  .case aside { grid-auto-flow: column; justify-content: start; align-items: center; gap: 12px; }
+}
+@media (max-width: 520px) {
+  body { padding-inline: 16px; }
+  nav { margin-inline: -16px; padding-inline: 16px; }
+  nav ul { gap: 14px; }
+  .skills { grid-template-columns: 1fr; }
+  .log li { grid-template-columns: 4.2rem 1fr; }
+  .log li .cat { display: none; }
+  .facts div { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* Experience timeline */
+.timeline { display: grid; border-top: 1px solid var(--line); }
+.job { display: grid; grid-template-columns: 11rem 1fr; gap: 28px; padding-block: 24px; border-bottom: 1px solid var(--line); }
+.job > * { min-width: 0; }
+.job time { font: 500 .8rem/1.6 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 3px; }
+.job h3 { font: 600 1.15rem/1.3 var(--font-body); }
+.job .org { color: var(--accent); font-weight: 500; margin: 2px 0 10px; }
+.job ul { margin: 0; padding-left: 1.1rem; max-width: 64ch; }
+.job li { margin-bottom: 4px; }
+
+/* Credentials */
+.creds { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; }
+.creds > * { min-width: 0; }
+.creds h3 { font: 600 1rem var(--font-body); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.cred-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cred-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.cred-list li > span:first-child { min-width: 0; }
+.cred-list small { display: block; color: var(--muted); font-size: .85rem; }
+.status { flex: none; font: 500 .7rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
+.status.earned { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+.status.next { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+
+@media (max-width: 820px) {
+  .job { grid-template-columns: 1fr; gap: 6px; }
+  .creds { grid-template-columns: 1fr; gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top">brendan<span>@</span>clancy</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#work">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+
+  <header class="hero">
+    <div>
+      <span class="label">IT &amp; Security Operations</span>
+      <h1>Brendan Clancy</h1>
+      <p class="lede">I secure and run Microsoft 365 environments: identities, access, and the data behind them. B.S. in Cybersecurity, now moving into a dedicated security role.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://www.linkedin.com/in/brendanclancy22" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="#work">See my work</a>
+        <!-- TODO: upload resume.pdf to the repo, then remove the comment markers below -->
+        <!-- <a class="btn" href="resume.pdf">Resume (PDF)</a> -->
+      </div>
+    </div>
+
+    <div class="log" aria-label="Recent work log">
+      <header><span>activity.log · sano.org</span><b>● 2026</b></header>
+      <ol>
+        <li><time>2026-05</time><span class="cat">exchange</span><span>Standardized room mailboxes, approvals, permissions</span></li>
+        <li><time>2026-07</time><span class="cat">identity</span><span>Migrated UPNs @rwsgroup.org → @sano.org</span></li>
+        <li><time>2026-08</time><span class="cat">tenant</span><span>Consolidated a second M365 tenant into Sano</span></li>
+        <li><time>2026-09</time><span class="cat">access</span><span>Locked down SharePoint external sharing</span></li>
+        <li><time>2026-09</time><span class="cat">inventory</span><span>Started company-wide software &amp; license register</span></li>
+        <li><time>2026-10</time><span class="cat">recovery</span><span>Restored access to 240 GB NAS share</span></li>
+      </ol>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="sec-head">
+      <span class="label">About</span>
+      <h2>The only IT person in the building</h2>
+    </div>
+    <div class="about">
+      <div>
+        <p>I'm the Operations Associate &amp; IT Specialist at Sano, a financial planning, tax and benefits firm in Michigan. As the sole technology person in the office, I own everything from Entra ID and Intune to Exchange, SharePoint, phones and printers.</p>
+        <p>I came up through the help desk: an IT internship at GT Technologies, then Tier 1–2 support at Rockford Construction, where I led a company-wide Windows 11 migration. I hold a B.S. in Cybersecurity from Grand Valley State University and the Google Cybersecurity Professional Certificate.</p>
+        <p>The work I find most rewarding is the security side of IT: deciding who should have access to what, enforcing MFA and Conditional Access, cleaning up identities after a domain change, and making sure client data doesn't leave the organization by accident. I'm now focusing my career on security operations and identity &amp; access management.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Role</dt><dd>Operations Associate &amp; IT Specialist, Sano</dd></div>
+        <div><dt>Education</dt><dd>B.S. Cybersecurity, Grand Valley State University</dd></div>
+        <div><dt>Location</dt><dd>Ann Arbor, Michigan</dd></div>
+        <div><dt>Focus</dt><dd>Identity &amp; access, M365 security, endpoint security</dd></div>
+        <div><dt>Seeking</dt><dd>Security analyst, IAM and SecOps roles</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-head">
+      <span class="label">Experience</span>
+      <h2>From help desk to sole IT admin</h2>
+    </div>
+    <div class="timeline">
+      <article class="job">
+        <time>Feb 2026 – Present</time>
+        <div>
+          <h3>Operations Associate / IT Specialist</h3>
+          <p class="org">Sano (formerly Retirement &amp; Wealth Strategies)</p>
+          <ul>
+            <li>Sole IT administrator for Microsoft 365, Entra ID, Intune, SharePoint Online and Teams, covering device provisioning and lifecycle, security policy enforcement and user access management</li>
+            <li>Led the company-wide identity migration from @rwsgroup.org to @sano.org and merged a secondary Microsoft 365 tenant</li>
+            <li>Tightened SharePoint permissions and external sharing to limit outside access to client data</li>
+            <li>Manage Exchange Online mailbox permissions with PowerShell and maintain a company-wide software and access register</li>
+          </ul>
+        </div>
+      </article>
+      <article class="job">
+        <time>Jan 2025 – Feb 2026</time>
+        <div>
+          <h3>IT Support Technician</h3>
+          <p class="org">Rockford Construction</p>
+          <ul>
+            <li>Tier 1–2 help desk support for hardware, software and access issues</li>
+            <li>Troubleshoot Windows and user account problems in Active Directory</li>
+            <li>Provision accounts, devices and permissions for onboarding and offboarding</li>
+            <li>Led a company-wide Windows 11 migration with minimal downtime</li>
+            <li>Supported the rollout of stronger password and security policies</li>
+          </ul>
+        </div>
+      </article>
+      <article class="job">
+        <time>Jun 2024 – Aug 2024</time>
+        <div>
+          <h3>IT Intern</h3>
+          <p class="org">GT Technologies</p>
+          <ul>
+            <li>Managed user accounts and group permissions in Active Directory across multiple departments</li>
+            <li>Migrated user systems with Laplink PCmover while preserving data integrity</li>
+            <li>Installed and supported enterprise software including CrowdStrike and TeamViewer</li>
+            <li>Performed hardware upgrades, system imaging and troubleshooting</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="credentials">
+    <div class="sec-head">
+      <span class="label">Education &amp; certifications</span>
+      <h2>Credentials</h2>
+    </div>
+    <div class="creds">
+      <div>
+        <h3>Education</h3>
+        <ul class="cred-list">
+          <li><span>B.S. in Cybersecurity<small>Grand Valley State University</small></span><span class="status earned">Earned</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Certifications</h3>
+        <ul class="cred-list">
+          <li><span>Google Cybersecurity Professional Certificate<small>Google</small></span><span class="status earned">Earned</span></li>
+          <li><span>CompTIA Security+<small>CompTIA · security fundamentals</small></span><span class="status next">Up next</span></li>
+          <li><span>Microsoft Certified: Identity and Access Administrator (SC-300)<small>Microsoft · Entra ID, Conditional Access, access governance</small></span><span class="status next">Planned</span></li>
+          <li><span>Hack The Box<small>Hands-on security labs</small></span><span class="status">Exploring</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="sec-head">
+      <span class="label">Selected work</span>
+      <h2>Projects, with the security angle</h2>
+      <p>Each project is tagged with the NIST Cybersecurity Framework function it supports most.</p>
+    </div>
+
+    <div class="cases">
+      <article class="case">
+        <aside><span class="fn">Protect</span><small>Identity · 2026</small></aside>
+        <div>
+          <h3>Company rebrand and identity migration</h3>
+          <p>Moved every user from @rwsgroup.org to @sano.org as part of the Sano rebrand, and merged a separate small Microsoft 365 tenant into the main one.</p>
+          <ul>
+            <li>Changed primary SMTP addresses and UPNs across the tenant and updated branding and display names</li>
+            <li>Fixed broken OneDrive and OneNote links, cached old identities and stale profile data left behind by the change</li>
+            <li>Set up forwarding from retired domains and moved users' RingCentral sign-ins to the new domain</li>
+            <li>Exported old-domain mailboxes to PST and staged them for import before cutover</li>
+          </ul>
+          <p class="angle"><strong>Why it matters for security:</strong> identity changes are where orphaned accounts and stray access come from. Getting a clean, single identity per person is the foundation for access reviews and sign-in monitoring.</p>
+          <div class="tags"><span>Entra ID</span><span>Exchange Online</span><span>OneDrive</span><span>PowerShell</span></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <aside><span class="fn">Protect</span><small>Data access · 2026</small></aside>
+        <div>
+          <h3>SharePoint permissions and external sharing</h3>
+          <p>Built Sano's intranet, team hubs and a Financial Planner resource hub, then tightened how files are shared with people outside the company.</p>
+          <ul>
+            <li>Controlled outside-party access to sites and files</li>
+            <li>Created dedicated transfer sites for former employees and advisors, separate from internal content</li>
+            <li>Wrote a file-sharing SOP and knowledge base for staff</li>
+          </ul>
+          <p class="angle"><strong>Why it matters for security:</strong> a financial firm's biggest data-loss risk is oversharing. Scoped transfer sites give departing staff what they need without leaving open links into client data.</p>
+          <div class="tags"><span>SharePoint Online</span><span>Teams</span><span>External sharing</span><span>SOPs</span></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <aside><span class="fn">Identify</span><small>Asset inventory · 2026</small></aside>
+        <div>
+          <h3>Software and license register</h3>
+          <p>Building one place that lists every application the company uses, who has access to it, what it costs, and when contracts renew.</p>
+          <ul>
+            <li>Covers Microsoft 365, RingCentral, NordLayer, Zocks, Claude and more</li>
+            <li>Tracks per-user assignment so it's clear who should and shouldn't have each app</li>
+          </ul>
+          <p class="angle"><strong>Why it matters for security:</strong> you can't protect what you haven't inventoried. This is the software-asset inventory that access reviews and offboarding depend on.</p>
+          <div class="tags"><span>Asset management</span><span>Access review</span><span>Licensing</span></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <aside><span class="fn">Protect</span><small>Exchange · 2026</small></aside>
+        <div>
+          <h3>Mailbox permissions and room booking</h3>
+          <p>Standardized how conference rooms are booked and how shared and delegated mailboxes are granted.</p>
+          <ul>
+            <li>Set up room lists, Room Finder and approval workflows</li>
+            <li>Manage shared mailboxes, Send As, forwarding and calendar permissions with Exchange Online PowerShell</li>
+          </ul>
+          <p class="angle"><strong>Why it matters for security:</strong> Send As and forwarding rules are common paths for business email compromise. Granting them deliberately, and knowing where they exist, closes that gap.</p>
+          <div class="tags"><span>Exchange Online</span><span>PowerShell</span><span>Least privilege</span></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <aside><span class="fn">Recover</span><small>Infrastructure · 2026</small></aside>
+        <div>
+          <h3>Restoring a business file share after a network change</h3>
+          <p>After a network change, the office NAS holding about 240 GB of business data dropped off. I located it on the new network and restored authenticated access to the existing share instead of rebuilding it from scratch.</p>
+          <p class="angle"><strong>Why it matters for security:</strong> recovery means bringing data back with its original access controls intact, not reopening it to everyone to get it working.</p>
+          <div class="tags"><span>NAS</span><span>SMB</span><span>Networking</span></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <aside><span class="fn">Automate</span><small>Workflow · 2026</small></aside>
+        <div>
+          <h3>Tracking and alerting with Lists and Power Automate</h3>
+          <p>Built a service queue for the Health team and a task tracker with scheduled follow-up reminders and a contingency trigger that fires when items stall.</p>
+          <ul>
+            <li>Added duplicate-notification prevention so alerts stay useful</li>
+            <li>Tested every trigger end to end before handing it over</li>
+          </ul>
+          <div class="tags"><span>Power Automate</span><span>Microsoft Lists</span><span>Alerting</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sec-head">
+      <span class="label">Skills</span>
+      <h2>What I work with</h2>
+    </div>
+    <div class="skills">
+      <div>
+        <h3>Identity &amp; access</h3>
+        <ul><li>Microsoft Entra ID</li><li>Active Directory</li><li>MFA &amp; Conditional Access</li><li>UPN / domain migrations</li><li>Onboarding &amp; offboarding</li></ul>
+      </div>
+      <div>
+        <h3>Security tools</h3>
+        <ul><li>CrowdStrike</li><li>SentinelOne</li><li>Rapid7</li><li>SharePoint external sharing controls</li></ul>
+      </div>
+      <div>
+        <h3>Microsoft 365</h3>
+        <ul><li>Exchange Online</li><li>SharePoint Online &amp; Teams</li><li>M365 admin centers</li><li>Tenant consolidation</li></ul>
+      </div>
+      <div>
+        <h3>Scripting &amp; automation</h3>
+        <ul><li>PowerShell</li><li>Power Automate</li><li>Microsoft Lists</li></ul>
+      </div>
+      <div>
+        <h3>Endpoints &amp; network</h3>
+        <ul><li>Microsoft Intune</li><li>Windows 10 / 11 deployment &amp; imaging</li><li>Tier 1–2 help desk</li><li>Remote support (TeamViewer)</li></ul>
+      </div>
+      <div>
+        <h3>Process</h3>
+        <ul><li>SOPs &amp; documentation</li><li>Vendor &amp; software evaluation</li><li>RingCentral administration</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact">
+      <div class="sec-head">
+        <span class="label">Contact</span>
+        <h2>Let's talk</h2>
+        <p>I'm open to security analyst, IAM and security operations roles. Email or LinkedIn both reach me.</p>
+      </div>
+      <div class="contact-list">
+        <a href="mailto:bclanc22@gmail.com"><span>Email</span><span>bclanc22@gmail.com</span></a>
+        <a href="https://www.linkedin.com/in/brendanclancy22" target="_blank" rel="noopener"><span>LinkedIn</span><span>in/brendanclancy22</span></a>
+        <!-- <a href="https://github.com/YOUR-USERNAME" target="_blank" rel="noopener"><span>GitHub</span><span>YOUR-USERNAME</span></a> -->
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Brendan Clancy · Ann Arbor, MI</div>
+</footer>
+
+</body>
+</html>
